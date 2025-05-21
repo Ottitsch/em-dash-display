@@ -1,12 +1,11 @@
-# InfoVis UE - Exercise 2: Linked View with d3
+# em-dash-display
 
 Scaffold for building multiple coordinated views using d3 with a Python backend using Flask.
 
-## Project setup using PyCharm:
+## Setup Project:
 
 
-1. Create new PyCharm project from this folder
-2. Creating Virtual Environment:
+1. Creating Virtual Environment:
 Ctrl+Alt+S to open Settings
 --> Project
 --> Project Interpreter
@@ -15,11 +14,11 @@ Ctrl+Alt+S to open Settings
 --> "Virtualenv Environment
 --> New environment
 --> OK
-3. Install required packages:
+2. Install required packages:
 open requirements.txt
 --> click on "Install requirements" from bar on the top
 Alternatively, you can install the requirements individually from the Project Interpreter menu (select "+")
-4. Set Working Directory:
+3. Set Working Directory:
 in order to load data on the server, you might need to set your Working Directory on PyCharm, otherwise you might get
 the error "No such file or directory" when attemping to load data.
 To do that, open Run
