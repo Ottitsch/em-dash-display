@@ -11,11 +11,7 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 @app.route('/')
 def data():
-    # replace this with the real data
-    testData = ["hello", "infovis", "2025"]
-
-    # return the index file and the data
-    return render_template("index.html", data=json.dumps(testData))
+    return render_template("index.html")
 
 
 if __name__ == '__main__':
