@@ -1,5 +1,3 @@
-// Line plot for em-dash usage trends over time for all subreddits with >0% usage, with interactivity
-
 d3.csv('/static/data/analysis.csv').then(data => {
     // Parse and prepare
     data.forEach(d => {
@@ -42,10 +40,8 @@ d3.csv('/static/data/analysis.csv').then(data => {
         .attr('for','subreddit_search')
         .style('font-weight','bold')
         .text('Select Subreddits:');
-    let searchAndButtonContainer = controlsContainer.append('div')
-        .style('display','flex')
-        .style('align-items','center');
-    let searchContainer = searchAndButtonContainer.append('div')
+
+    let searchContainer = controlsContainer.append('div')
         .style('position','relative')
         .style('display','inline-block');
 
@@ -58,32 +54,39 @@ d3.csv('/static/data/analysis.csv').then(data => {
         .attr('id','subreddit_select')
         .attr('multiple', true)
         .style('width','250px')
-        .style('height','300px')
+        .style('height','200px')
         .style('margin-top','5px')
         .style('position','absolute')
         .style('top','100%')
         .style('left','0')
         .style('z-index','100');
+
     select.selectAll('option')
         .data(subreddits)
         .enter()
         .append('option')
         .attr('value', d => d)
         .text(d => d);
+
     select.selectAll('option').property('selected', true);
 
-    // control buttons
-    searchAndButtonContainer.append('button')
+    // control buttons (below the dropdown)
+    let buttonsContainer = controlsContainer.append('div')
+        .style('margin-top','300px')
+        .style('display','flex')
+        .style('flex-wrap','wrap');
+
+    buttonsContainer.append('button')
         .text('Show All')
-        .style('margin-left','10px')
+        .attr('class','btn')
         .on('click', () => {
             select.selectAll('option').property('selected', true);
             draw(subreddits);
         });
 
-    searchAndButtonContainer.append('button')
+    buttonsContainer.append('button')
         .text('Top 10 Posts')
-        .style('margin-left','10px')
+        .attr('class','btn')
         .on('click', () => {
             let top10 = Object.entries(totalPostsBySub)
                 .sort((a,b)=>b[1]-a[1]).slice(0,10).map(d=>d[0]);
@@ -91,9 +94,9 @@ d3.csv('/static/data/analysis.csv').then(data => {
             draw(top10);
         });
 
-    searchAndButtonContainer.append('button')
+    buttonsContainer.append('button')
         .text('Top 10 Em Dashes')
-        .style('margin-left','10px')
+        .attr('class','btn')
         .on('click', () => {
             let top10 = Object.entries(totalEmCountBySub)
                 .sort((a,b)=>b[1]-a[1]).slice(0,10).map(d=>d[0]);
@@ -101,9 +104,9 @@ d3.csv('/static/data/analysis.csv').then(data => {
             draw(top10);
         });
 
-    searchAndButtonContainer.append('button')
+    buttonsContainer.append('button')
         .text('No Em Dashes')
-        .style('margin-left','10px')
+        .attr('class','btn')
         .on('click', () => {
             let none = Object.entries(totalEmCountBySub)
                 .filter(d=>d[1]===0).map(d=>d[0]);
@@ -120,19 +123,14 @@ d3.csv('/static/data/analysis.csv').then(data => {
             name: sub,
             values: months.map(month => {
                 let found = data.find(d=>d.subreddit===sub && d.month===month);
-                return {
-                    month,
-                    em_dash_percent: found ? found.em_dash_percent : 0
-                };
+                return { month, em_dash_percent: found ? found.em_dash_percent : 0 };
             })
         }));
 
-        // decide whether to draw overall:
-        //  >1 sub AND at least one has >0 em-dashes total
+        // decide whether to draw overall-average
         let showOverall = series.length > 1
                         && selectedSubs.some(sub => totalEmCountBySub[sub] > 0);
 
-        // if so, compute overall-average series
         let overallAverageSeries;
         if (showOverall) {
             overallAverageSeries = {
@@ -141,10 +139,7 @@ d3.csv('/static/data/analysis.csv').then(data => {
                     let vals = data
                         .filter(d=>d.month===month && selectedSubs.includes(d.subreddit))
                         .map(d=>d.em_dash_percent);
-                    return {
-                        month,
-                        em_dash_percent: d3.mean(vals) || 0
-                    };
+                    return { month, em_dash_percent: d3.mean(vals) || 0 };
                 })
             };
         }
@@ -180,7 +175,6 @@ d3.csv('/static/data/analysis.csv').then(data => {
             .attr('transform',`translate(${margin.left},0)`)
             .call(d3.axisLeft(y).tickFormat(d=>d+'%'));
 
-        // color scale (still used for everything except overall)
         const color = d3.scaleOrdinal(
             d3.schemeTableau10.concat(d3.schemePastel1, ['yellow'])
         ).domain([...subreddits, 'Overall Average']);
@@ -189,7 +183,7 @@ d3.csv('/static/data/analysis.csv').then(data => {
             .x(d=>x(d.month))
             .y(d=>y(d.em_dash_percent));
 
-        // draw subreddit lines
+        // draw subreddit lines & dots
         svg.selectAll('.line.subreddit')
             .data(series)
             .enter().append('path')
@@ -200,7 +194,6 @@ d3.csv('/static/data/analysis.csv').then(data => {
             .attr('stroke-opacity',0.6)
             .attr('d', d=>line(d.values));
 
-        // draw subreddit dots
         svg.selectAll('.dot.subreddit')
             .data(series.flatMap(s=>s.values.map(v=>({...v,name:s.name}))))
             .enter().append('circle')
@@ -210,14 +203,14 @@ d3.csv('/static/data/analysis.csv').then(data => {
             .attr('r',3)
             .attr('fill', d=>color(d.name));
 
-        // draw overall-average in solid black if needed
+        // draw overall if needed
         if (showOverall) {
             svg.selectAll('.line.overall')
                 .data([overallAverageSeries])
                 .enter().append('path')
                 .attr('class','line overall')
                 .attr('fill','none')
-                .attr('stroke','#5E5E5E')       // ← always black
+                .attr('stroke','#5E5E5E')
                 .attr('stroke-width',3.5)
                 .attr('stroke-opacity',1.0)
                 .attr('d', d=>line(d.values));
@@ -229,7 +222,7 @@ d3.csv('/static/data/analysis.csv').then(data => {
                 .attr('cx', d=>x(d.month))
                 .attr('cy', d=>y(d.em_dash_percent))
                 .attr('r',5)
-                .attr('fill','#5E5E5E');        // ← always black
+                .attr('fill','#5E5E5E');
         }
 
         // titles
@@ -249,15 +242,10 @@ d3.csv('/static/data/analysis.csv').then(data => {
             .attr('font-size','15px')
             .text('Percentage of Posts with Em Dashes');
 
-        // legend (always include Overall if present)
-        let legendData;
-        if (showOverall) {
-            // put Overall first, then up to 14 subreddits
-            legendData = [ overallAverageSeries ].concat(series.slice(0, 14));
-        } else {
-            // just first 15 subreddits
-            legendData = series.slice(0, 15);
-        }
+        // legend
+        let legendData = showOverall
+            ? [overallAverageSeries].concat(series.slice(0, 14))
+            : series.slice(0, 15);
 
         const legend = svg.selectAll('.legend')
             .data(legendData)
@@ -268,19 +256,13 @@ d3.csv('/static/data/analysis.csv').then(data => {
         legend.append('rect')
             .attr('width',18)
             .attr('height',18)
-            .attr('fill', d =>
-                d.name === 'Overall Average' ? '#5E5E5E' : color(d.name)
-            );
+            .attr('fill', d => d.name === 'Overall Average' ? '#5E5E5E' : color(d.name));
 
         legend.append('text')
             .attr('x',24)
             .attr('y',13)
             .attr('font-size','14px')
-            .text(d =>
-                d.name === 'Overall Average'
-                  ? d.name
-                  : (d.name.startsWith('r/') ? d.name : 'r/'+d.name)
-            );
+            .text(d => d.name === 'Overall Average' ? d.name : (d.name.startsWith('r/') ? d.name : 'r/'+d.name));
     }
 
     // initial draw
