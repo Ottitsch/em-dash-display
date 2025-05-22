@@ -16,7 +16,7 @@ body {
 h1 {
     font-size: 2.5em;
     font-weight: 700;
-    margin-top: 40px;
+    margin-top: 30px;
     margin-left: 0;
     letter-spacing: 1px;
     color: #22223b;
@@ -68,7 +68,7 @@ text.title {
     padding: 32px 32px 24px 32px;
     margin: 32px auto 0 auto;
     width: 100%;
-    max-width: 800px;
+    max-width: 1050px;
     min-width: 0;
 }
 
@@ -197,7 +197,7 @@ text.title {
   border-left: 4px solid #bfc4d1;
   border-radius: 8px;
   margin: 18px auto 0 auto;
-  padding: 14px 22px;
+  padding: 0px 22px;
   max-width: 700px;
   font-size: 1.08em;
   color: #33374d;
@@ -205,12 +205,14 @@ text.title {
   text-align: center;
 }
 
+/* button */
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0.5em 1rem;
+  margin-top: 3px;
   font-size: 0.9rem;
   font-weight: 500;
   color: #ffffff;
@@ -231,8 +233,17 @@ text.title {
 }
 
 .btn:focus {
-  outline: 2px solid #C6E2FF;             /* pale sky-blue outline */
+  outline: 2px solid #C6E2FF;
   outline-offset: 2px;
+  /* trigger the fade */
+  animation: fadeOutline 1s forwards;
+}
+
+@keyframes fadeOutline {
+  /* from current outline color, to transparent */
+  to {
+    outline-color: transparent;
+  }
 }
 
 .btn:disabled {
@@ -241,4 +252,76 @@ text.title {
   cursor: not-allowed;
   box-shadow: none;
   transform: none;
+}
+
+
+/* SEARCH */
+
+/* wrap both input + select in a neat container */
+.search-container {
+  position: relative;
+  display: inline-block;
+  width: 250px;
+  border: 1px solid #ccc;
+  border-radius: 0.375rem;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+/* search box at the top */
+#subreddit_search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5em 1em;
+  font-size: 0.9rem;
+  border: none;
+  outline: none;
+  background-color: #ffffff;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+#subreddit_search:focus {
+  background-color: #ffffffd7;
+}
+
+/* the dropdown list below */
+#subreddit_select {
+  width: 200px;
+  height: 200px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0.25em 0;
+  font-size: 0.9rem;
+  border: none;
+  background-color: #ffffff;
+  overflow-y: auto;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  cursor: pointer;
+}
+
+/* each option spaced nicely */
+#subreddit_select option {
+  padding: 0.25em 1em;
+}
+
+/* custom scrollbar for WebKit browsers */
+#subreddit_select::-webkit-scrollbar {
+  width: 8px;
+}
+#subreddit_select::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+#subreddit_select::-webkit-scrollbar-thumb {
+  background: #c1e3e6;
+  border-radius: 4px;
+}
+#subreddit_select::-webkit-scrollbar-thumb:hover {
+  background: #9acde6;
+}
+
+/* show/hide behavior: only show when input has focus or has text */
+.search-container:not(:focus-within) #subreddit_select {
+  display: none;
 }

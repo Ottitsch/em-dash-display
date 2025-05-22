@@ -53,13 +53,8 @@ d3.csv('/static/data/analysis.csv').then(data => {
     let select = searchContainer.append('select')
         .attr('id','subreddit_select')
         .attr('multiple', true)
-        .style('width','250px')
-        .style('height','200px')
-        .style('margin-top','5px')
-        .style('position','absolute')
-        .style('top','100%')
-        .style('left','0')
-        .style('z-index','100');
+
+        
 
     select.selectAll('option')
         .data(subreddits)
@@ -72,7 +67,7 @@ d3.csv('/static/data/analysis.csv').then(data => {
 
     // control buttons (below the dropdown)
     let buttonsContainer = controlsContainer.append('div')
-        .style('margin-top','300px')
+        .style('margin-top','0px')
         .style('display','flex')
         .style('flex-wrap','wrap');
 
