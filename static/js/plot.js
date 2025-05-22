@@ -81,6 +81,9 @@ function renderChart(data, selectedMonth) {
 }
 
 d3.csv('/static/data/analysis.csv').then(data => {
+    // Filter out data from 2025
+    data = data.filter(d => !d.month.startsWith('2025'));
+
     let months = Array.from(new Set(data.map(d => d.month)));
     months.sort().reverse();
     const monthSelect = d3.select('#month_select');

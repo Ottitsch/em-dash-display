@@ -9,30 +9,28 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.0/topojson.min.js"></script>
     <script src="{{url_for('static',filename='js/plot.js')}}"></script>
+    <script src="{{url_for('static',filename='js/lineplot.js')}}"></script>
 
 </head>
 <body>
 
 <h1>The Em dash conspiracy</h1>
 
-<div class="dd_container">
-  <label for="month_select"><strong>Select Month:</strong></label>
-  <select id="month_select"></select>
-</div>
-
-<div id="main_container" class="main_container">
-    <div class="container_r">
-        <svg id="svg_plot"></svg>
-    </div>
-</div>
-
 <div class="info-legend">
   <strong>Em Dash Percent</strong> is the percentage of all dash-like characters in subreddit posts that are em dashes (—). Higher values indicate more frequent use of em dashes compared to other dashes or hyphens.
 </div>
 
-<div id="svg_line_plot" class="svg_line_plot">
-
+<div id="main_container" class="main_container">
+    <div class="container_r">
+        <div id="svg_line_plot" class="svg_line_plot"></div>
+        <div class="dd_container">
+            <label for="month_select"><strong>Select Month:</strong></label>
+            <select id="month_select"></select>
+          </div>
+        <svg id="svg_plot"></svg>
+    </div>
 </div>
+
 <div id="legend"></div>
 
 <script>
