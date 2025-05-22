@@ -1,9 +1,8 @@
 # em-dash-display
 
-Scaffold for building multiple coordinated views using d3 with a Python backend using Flask.
+Data was gathered by Romain Florentz on May 4, 2025.
 
 ## Setup Project:
-
 
 1. Creating Virtual Environment:
 Ctrl+Alt+S to open Settings
@@ -34,4 +33,6 @@ set your Working Directory to the root directory (i.e. where "app.py" and the "s
 * static/data/: folder where your data should go
 * static/styles/style.css: CSS styles
 
-You may modify all files. You may (and actually should) add JavaScript files to static/js.
+## Additional info:
+
+Project heavily inspired by https://github.com/v4nn4/em-dash-conspiracy
