@@ -52,7 +52,7 @@ With the release of **ChatGPT-4o**, em dash usage appears to have surged. But is
 | Dataset                                                                      | Time Span | Observation                                                             |
 | ---------------------------------------------------------------------------- | --------- | ----------------------------------------------------------------------- |
 | [Twitter-Autism](https://www.kaggle.com/code/ottitsch/twitter-em)           | 2017–2023 | No notable em-dash pattern detected.                                    |
-| [Arxiv & Wikipedia](https://www.kaggle.com/code/ottitsch/arxiv-wiki-em)     | 2007–2025 | No em dashes found (only first 98 characters of abstracts used).        |
+| [Arxiv & Wikipedia](https://www.kaggle.com/code/ottitsch/arxiv-wiki-em)     | 2007–2025 | No em dashes found (only first 98 characters of abstracts examined).        |
 | [Base-De-Reddit](https://www.kaggle.com/code/ottitsch/reddit-em)            | 2014–2025 | Significant increase in em-dash usage over recent years.                |
 | [Letterboxd Movies](https://www.kaggle.com/code/ottitsch/letterbox-em)      | 1874–2031 | Recent movies more likely to use em dashes in descriptions.             |
 | [Facebook Vietnam](https://www.kaggle.com/code/ottitsch/facebook-vietnam-em)| 2009–2020 | Able to simulate a false positive resembling ChatGPT-style text.        |
